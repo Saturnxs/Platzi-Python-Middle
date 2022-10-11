@@ -46,22 +46,24 @@ def sortWord():
         
 def game():
     selectedWord = sortWord()
-    hiddenWord= [("_") for letter in selectedWord]
+    hiddenWord = [("_") for letter in selectedWord]
+    wordLenght = len(selectedWord)
+
     moves = 0
     won = False
     
-    while not won:
+    while wordLenght > 0:
         os.system('cls')
         print("\nNueva partida\n")
         print("\nAdivina la palabra\n")
-        print(selectedWord)
         print(" ".join(hiddenWord))
-        
+
         letter = input("\nIngresa una letra: ").lower()
-        lettersFound = checkLetter(selectedWord, letter)
         
+        lettersFound = checkLetter(selectedWord, letter)
         if(len(lettersFound) > 0):
             updateHiddenWord(lettersFound, hiddenWord, letter)
+            wordLenght = wordLenght - len(lettersFound)
     
     
 def checkLetter(word, letter):
@@ -71,13 +73,12 @@ def checkLetter(word, letter):
             matchingLettersIndex.append(int(index))
     return matchingLettersIndex
 
-
+    
 def updateHiddenWord(lettersFound, hiddenWord, letter):
     for index in lettersFound:
         hiddenWord[index] = letter.upper()
     return hiddenWord
             
-    
         
 def run():
     route()  
