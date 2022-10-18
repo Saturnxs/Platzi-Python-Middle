@@ -1,48 +1,40 @@
 import os, random
 
 
-def route():
+def menu():
     """
     It's a function that clears the screen, prints a menu, and then depending on the user's input,
     either runs the game, prints the score, or exits the game
     """
     leaving = False
+    errorMessage = ""
+    option = 0
     
     while not leaving:
         os.system('cls')
+          
+        print("\n▄▀█ █░█ █▀█ █▀█ █▀▀ ▄▀█ █▀▄ █▀█\n█▀█ █▀█ █▄█ █▀▄ █▄▄ █▀█ █▄▀ █▄█\n")
+        print("1. Nueva partida")
+        print("2. Mi puntaje")
+        print("3. Salir")
         
-        match menu():
-            case 1:
-                game()
-            case 2:
-                print('Puntaje')
-            case 3:
-                leaving = True
-                os.system('cls')
-                print('¡Gracias por jugar al juego del ahorcado!')
-            case other:
-                print('Ingresa una opcion valida') 
-    
-    
-def menu():
-    """
-    It prints a menu, then asks the user to input a number. If the user inputs a number, it returns that
-    number. If the user inputs something that isn't a number, it prints an error message and returns 0
-    :return: The option variable is being returned.
-    """
-    option = 0
-    
-    print("\n▄▀█ █░█ █▀█ █▀█ █▀▀ ▄▀█ █▀▄ █▀█\n█▀█ █▀█ █▄█ █▀▄ █▄▄ █▀█ █▄▀ █▄█\n")
-    print("1. Nueva partida")
-    print("2. Mi puntaje")
-    print("3. Salir")
-
-    try:
-        option = int(input("\nIngresa una opción: "))
-    except ValueError:
-        print("Por favor, ingrese un número 🤠")
-    
-    return option
+        print("\n"+errorMessage)
+        
+        try:
+            option = int(input("Ingresa una opción: "))
+            match option:
+                case 1:
+                    game()
+                case 2:
+                    print('Puntaje')
+                case 3:
+                    leaving = True
+                    os.system('cls')
+                    print('¡Gracias por jugar al juego del ahorcado!')
+                case other:
+                    errorMessage = "Por favor, ingresa una opción válida"
+        except ValueError:
+            errorMessage = "Por favor, ingresa una opción válida"
 
 
 def sortWord():
@@ -69,6 +61,11 @@ def sortWord():
 
         
 def game():
+    """
+    It creates a list of underscores that is the same length as the word that the user is trying to
+    guess, and then it asks the user to input a letter. If the letter is in the word, it updates the
+    list of underscores. If it isn't, it prints a message
+    """
     # Creating a list of underscores that is the same length as the word that the user is trying to guess.
     selectedWord = sortWord()
     hiddenWord = [("_") for letter in selectedWord]
@@ -91,11 +88,12 @@ def game():
         
         print("\n"+gameMessage)
         try:  
-            letter = input("Ingresa una letra: ")
+            # It's asking the user to input a letter, and then it's checking if the input is a letter.
+            # If it isn't, it raises a ValueError.
+            letter = input("Ingresa una letra: ").lower()
             if (len(letter) != 1 or letter.isdigit()):
                 raise ValueError('Ingresa solamente una letra')
             
-            letter = letter.lower()
             if(letterWasNotFound(foundLetters, letter)):
                 foundLetterIndexes = getLettersIndexes(selectedWord, letter)
                 if(len(foundLetterIndexes) > 0):
@@ -133,7 +131,7 @@ def game():
                 case 1:
                     game()
                 case 2:
-                    break   
+                    break
     
     
 def getLettersIndexes(word, letter):
@@ -182,7 +180,7 @@ def letterWasNotFound(foundLetters, newLetter):
 
         
 def run():
-    route()  
+    menu()  
     
 
 if __name__ == "__main__":
