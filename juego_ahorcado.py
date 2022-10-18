@@ -1,10 +1,11 @@
 import os, random
 
+# Have to create points system and hangman image
 
 def menu():
     """
-    It's a function that clears the screen, prints a menu, and then depending on the user's input,
-    either runs the game, prints the score, or exits the game
+    It's a function that displays a menu, and depending on the option chosen, it either starts a new
+    game, displays the score, or exits the program
     """
     leaving = False
     errorMessage = ""
@@ -19,7 +20,6 @@ def menu():
         print("3. Salir")
         
         print("\n"+errorMessage)
-        
         try:
             option = int(input("Ingresa una opción: "))
             match option:
@@ -66,25 +66,37 @@ def game():
     guess, and then it asks the user to input a letter. If the letter is in the word, it updates the
     list of underscores. If it isn't, it prints a message
     """
+    hangmanImages = [
+        "  +---+\n  |   |\n      |\n      |\n      |\n      |\n=========", 
+        "  +---+\n  |   |\n  O   |\n      |\n      |\n      |\n=========",
+        "  +---+\n  |   |\n  O   |\n  |   |\n      |\n      |\n=========",
+        "  +---+\n  |   |\n  O   |\n /|   |\n      |\n      |\n=========", 
+        "  +---+\n  |   |\n  O   |\n /|\  |\n      |\n      |\n=========",
+        "  +---+\n  |   |\n  O   |\n /|\  |\n /    |\n      |\n=========",
+        "  +---+\n  |   |\n  O   |\n /|\  |\n / \  |\n      |\n========="
+    ] 
+        
     # Creating a list of underscores that is the same length as the word that the user is trying to guess.
     selectedWord = sortWord()
     hiddenWord = [("_") for letter in selectedWord]
-    wordLenght = len(selectedWord)
+    wordsNotFound = len(selectedWord)
     
     
     # Creating a list of found letters and a message to be displayed to the user.
     foundLetters = []
     gameMessage = ""
+    failedChances = 0
+    notLost = True
     
-    while wordLenght > 0:
+    while wordsNotFound > 0 and notLost:
         # The game loop. It prints the game board, asks the user to input a letter, and then checks if
         # the letter is in the word. If it is, it updates the hidden word. If it isn't, it prints a
         # message.
         
         os.system('cls')
-        print("\n--------- Nueva partida ---------")
-        print("\nAdivina la palabra\n")
-        print(" ".join(hiddenWord))
+        print("\n▄▀█ █▀▄ █ █░█ █ █▄░█ ▄▀█   █░░ ▄▀█   █▀█ ▄▀█ █░░ ▄▀█ █▄▄ █▀█ ▄▀█\n█▀█ █▄▀ █ ▀▄▀ █ █░▀█ █▀█   █▄▄ █▀█   █▀▀ █▀█ █▄▄ █▀█ █▄█ █▀▄ █▀█\n")
+        print(hangmanImages[failedChances])
+        print("\n"+" ".join(hiddenWord))
         
         print("\n"+gameMessage)
         try:  
@@ -97,9 +109,13 @@ def game():
             if(letterWasNotFound(foundLetters, letter)):
                 foundLetterIndexes = getLettersIndexes(selectedWord, letter)
                 if(len(foundLetterIndexes) > 0):
-                    wordLenght = wordLenght - len(foundLetterIndexes)
+                    wordsNotFound = wordsNotFound - len(foundLetterIndexes)
                     updateHiddenWord(foundLetterIndexes, hiddenWord, letter)
                     foundLetters.append(letter)
+                else:
+                    failedChances = failedChances + 1
+                    notLost = True if failedChances < 6 else False
+                
                 gameMessage = ""
             else:
                 gameMessage = "Ya encontraste esta letra"
@@ -116,8 +132,9 @@ def game():
             os.system('cls')
             updateHiddenWord(foundLetterIndexes, hiddenWord, letter)
 
-            print("\n█▀▀ ▄▀█ █▄░█ ▄▀█ █▀ ▀█▀ █▀▀\n█▄█ █▀█ █░▀█ █▀█ ▄█ ░█░ ██▄\n")
-            print("La palabra era  "+" ".join(hiddenWord)+"\n")
+            print("\n█▀▀ ▄▀█ █▄░█ ▄▀█ █▀ ▀█▀ █▀▀\n█▄█ █▀█ █░▀█ █▀█ ▄█ ░█░ ██▄\n") if notLost else print("\n█▀█ █▀▀ █▀█ █▀▄ █ █▀ ▀█▀ █▀▀\n█▀▀ ██▄ █▀▄ █▄▀ █ ▄█ ░█░ ██▄\n")
+            print(hangmanImages[failedChances])
+            print("\nLa palabra era  "+" ".join(hiddenWord)+"\n") if notLost else print("\nLa palabra era  "+" ".join(selectedWord).upper()+"\n")
             print("1. Jugar de nuevo")
             print("2. Ir al menu")
             
