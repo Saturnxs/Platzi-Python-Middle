@@ -32,7 +32,7 @@ def menu():
     """
     option = 0
     
-    print("\n¡Bienvenido al juego del ahorcado!\n")
+    print("\n▄▀█ █░█ █▀█ █▀█ █▀▀ ▄▀█ █▀▄ █▀█\n█▀█ █▀█ █▄█ █▀▄ █▄▄ █▀█ █▄▀ █▄█\n")
     print("1. Nueva partida")
     print("2. Mi puntaje")
     print("3. Salir")
@@ -68,7 +68,7 @@ def sortWord():
     return wordSelected
 
         
-def game(): # ---------------- Need to validate if letter is actually one letter
+def game():
     # Creating a list of underscores that is the same length as the word that the user is trying to guess.
     selectedWord = sortWord()
     hiddenWord = [("_") for letter in selectedWord]
@@ -90,17 +90,24 @@ def game(): # ---------------- Need to validate if letter is actually one letter
         print(" ".join(hiddenWord))
         
         print("\n"+gameMessage)
-        letter = input("Ingresa una letra: ").lower()
-        
-        if(letterWasNotFound(foundLetters, letter)):
-            foundLetterIndexes = getLettersIndexes(selectedWord, letter)
-            if(len(foundLetterIndexes) > 0):
-                wordLenght = wordLenght - len(foundLetterIndexes)
-                updateHiddenWord(foundLetterIndexes, hiddenWord, letter)
-                foundLetters.append(letter)
-            gameMessage = ""
-        else:
-            gameMessage = "Ya encontraste esta letra"
+        try:  
+            letter = input("Ingresa una letra: ")
+            if (len(letter) != 1 or letter.isdigit()):
+                raise ValueError('Ingresa solamente una letra')
+            
+            letter = letter.lower()
+            if(letterWasNotFound(foundLetters, letter)):
+                foundLetterIndexes = getLettersIndexes(selectedWord, letter)
+                if(len(foundLetterIndexes) > 0):
+                    wordLenght = wordLenght - len(foundLetterIndexes)
+                    updateHiddenWord(foundLetterIndexes, hiddenWord, letter)
+                    foundLetters.append(letter)
+                gameMessage = ""
+            else:
+                gameMessage = "Ya encontraste esta letra"
+        except ValueError as ve:
+            gameMessage = str(ve)
+            
 
     else:
         # A loop that asks the user if they want to play again or go back to the menu.
@@ -111,7 +118,7 @@ def game(): # ---------------- Need to validate if letter is actually one letter
             os.system('cls')
             updateHiddenWord(foundLetterIndexes, hiddenWord, letter)
 
-            print("\n¡Ganaste!")
+            print("\n█▀▀ ▄▀█ █▄░█ ▄▀█ █▀ ▀█▀ █▀▀\n█▄█ █▀█ █░▀█ █▀█ ▄█ ░█░ ██▄\n")
             print("La palabra era  "+" ".join(hiddenWord)+"\n")
             print("1. Jugar de nuevo")
             print("2. Ir al menu")
