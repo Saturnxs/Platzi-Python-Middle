@@ -101,6 +101,8 @@ def run():
         print(worker)
         
     
+    # It's filtering the data to get only the people with age greater than 18 and then mapping the
+    # data to get only the names of the people with age greater than 18.
     adults = [worker["name"] for worker in DATA if worker["age"] > 18]
 
     print("\nAdults")

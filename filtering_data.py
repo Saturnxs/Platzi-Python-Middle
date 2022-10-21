@@ -72,14 +72,21 @@ DATA = [
 ]
 
 def run():
+    # A list comprehension that is filtering the list of workers and returning only the ones that have
+    # python as their language.
     all_pythons_devs = [worker["name"] for worker in DATA if worker["language"] == "python"]
     
+    # Filtering the list of workers and returning only the ones that have Platzi as their
+    # organization.
     all_platzi_workers = [worker["name"] for worker in DATA if worker["organization"] == "Platzi"]
     
+    # Filtering the list of workers and returning only the ones that have more than 18 years old.
     adults = list(filter(lambda worker: worker["age"] > 18, DATA))
     adults = list(map(lambda worker: worker["name"], adults))
     
     #old_people = list(filter(lambda worker: worker["age"] > 70, DATA))
+    # Adding a new key to the dictionary called `old` and setting it to `True` if the worker is older
+    # than 70 years old.
     old_people = list(map(lambda worker: worker | {"old": worker["age"] > 70}, DATA))
     
     
