@@ -27,9 +27,11 @@ def run():
     print(population)
     
     
+    # Creating a dictionary with the keys being the names and the values being the ages.
     names = ['nico', 'zule', 'santi']
     ages = [12, 56, 98]
     
+    # zip(names, ages) - Creating a list of tuples.
     users = {name: age for (name, age) in zip(names, ages)}
     print(users)
 
