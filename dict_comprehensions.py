@@ -34,6 +34,13 @@ def run():
     # zip(names, ages) - Creating a list of tuples.
     users = {name: age for (name, age) in zip(names, ages)}
     print(users)
+    
+    
+    # Creating a dictionary with the keys being the vowels and the values being the vowels in uppercase.
+    text = 'Hola, soy Thomas'
+    
+    unique = {char: char.upper() for char in text if char in 'aeiou'}
+    print(unique)
 
 if __name__ == "__main__":
     run()
