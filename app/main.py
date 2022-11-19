@@ -1,30 +1,17 @@
 import utils # Importing the `utils` module.
-
-data = [
-    {
-        'Country': 'Colombia',
-        'Population': 500
-    },
-    {
-        'Country': 'Bolivia',
-        'Population': 300
-    }
-]
+import handle_csv
+import charts
 
 def run():
-    keys, values = utils.get_population()
-    print(keys, values) # ['col', 'bol'] [300, 400]
-
-
-
-    string = utils.text
-    print(string) # Hello world!
-
-
-    country = input('Type country: ') # Colombia
+    data = handle_csv.read_csv('./app/data.csv')
+    country = input('Type country: ')
     result = utils.population_by_country(data, country)
-    print(result) # [{'Country': 'Colombia', 'Population': 500}]
-    
+    if len(result) > 0:
+        country = result[0]
+        labels, values = utils.get_population(country)
+        charts.generate_bar_chart(labels, values)
+
+
 
 if __name__ == "__main__":
     run()
